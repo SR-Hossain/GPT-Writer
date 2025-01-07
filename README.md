@@ -3,6 +3,8 @@ Get your gemini api key from https://aistudio.google.com/app/apikey
 
 
 ```bash
+cd
+rm -r GPT-Writer
 git clone https://github.com/SR-Hossain/GPT-Writer.git
 cd GPT-Writer
 pip install -r requirements.txt
