@@ -1,0 +1,69 @@
+#!/bin/bash
+
+function display_help() {
+    echo "Usage: gpt-writer"
+    echo " "
+    echo "GPT-Writer helps you manipulate your writing"
+    echo "get your gemini api key from https://aistudio.google.com/app/apikey"
+    echo "then run gpt-writer --config to set your api key"
+    echo ""
+    echo "Options:"
+    echo "  --config  Update the current configuration (e.g., API key)."
+    echo "  --update  Update the gpt-writer to the latest version."
+    echo "  --help    Display this help message."
+    echo "  -v        Display the version number."
+}
+
+function update_config() {
+    python3 $HOME/GPT-Writer/setup_config_file.py
+    exit 0
+}
+
+if [ "$1" == "--config" ]; then
+    update_config
+    exit 0
+fi
+
+
+function update_terminal_copilot() {
+    echo "Updating GPT-Writer..."
+    cd $HOME/Terminal-Copilot
+    git merge
+    sudo chmod +x gpt-writer
+    sudo cp gpt-writer /usr/bin/
+    echo "gpt-writer updated successfully."
+    exit 0
+}
+
+if [ "$1" == "--update" ]; then
+    update_terminal_copilot
+    exit 0
+fi
+
+
+function display_version() {
+    echo "ai version 1.0"
+    echo "Created by: Syed Sazid Hossain Rezvi"
+    echo "https://github.com/SR-Hossain"
+}
+
+if [ "$1" == "-v" ]; then
+    display_version
+    exit 0
+fi
+
+if [ "$1" == "--help" ]; then
+    display_help
+    exit 0
+fi
+
+
+
+
+
+python3 $HOME/GPT-Writer/main.py
+# if python script fails, exit
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+

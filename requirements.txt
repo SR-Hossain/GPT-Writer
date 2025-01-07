@@ -1,0 +1,4 @@
+PyAutoGUI
+pyperclip
+google-generativeai
+ipython~=8.20.0
