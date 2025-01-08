@@ -28,7 +28,7 @@ class PopupWindow(tk.Toplevel):
             ("Custom Prompt", custom_ai_prompt),
             ("Rephrase", rephrase),
             ("Search AI", self.search_ai),
-            ("Custom Search AI", self.custom_search_ai),
+            ("Advanced Search AI", self.advanced_search_ai),
         ]
 
         self.selected_index = 0
@@ -154,7 +154,7 @@ class PopupWindow(tk.Toplevel):
         # Ensure mouse/touchpad scrolling works by associating scrollbar with canvas
         scrollbar.config(command=canvas.yview)
 
-    def custom_search_ai(self, text=None):
+    def advanced_search_ai(self, text=None):
         """Generate a response from a custom AI prompt and display it as plain text in the dialog."""
         if text is None:
             text = self.selected_text
@@ -165,7 +165,7 @@ class PopupWindow(tk.Toplevel):
         if custom_prompt:
             # Generate the AI response using the custom prompt
             response = Gemini().generate_response(
-                f'N.B: Return response as raw form without any markdown formatting\n\nprompt: {custom_prompt}\n\n{text}')
+                f'N.B: Return response as raw form without any markdown formatting\n\ncontext/input: {text}\n\nprompt: {custom_prompt}')
 
             # Clear all widgets in the window
             for widget in self.winfo_children():
