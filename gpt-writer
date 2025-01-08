@@ -28,7 +28,10 @@ fi
 function update_terminal_copilot() {
     echo "Updating GPT-Writer..."
     cd $HOME/GPT-Writer/
-    git merge
+    git stash
+    git pull
+    git checkout -- config
+    git stash pop
     sudo chmod +x gpt-writer
     sudo cp gpt-writer /usr/bin/
     echo "gpt-writer updated successfully."
