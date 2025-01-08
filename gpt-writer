@@ -27,7 +27,7 @@ fi
 
 function update_terminal_copilot() {
     echo "Updating GPT-Writer..."
-    cd $HOME/Terminal-Copilot
+    cd $HOME/GPT-Writer/
     git merge
     sudo chmod +x gpt-writer
     sudo cp gpt-writer /usr/bin/
