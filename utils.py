@@ -16,6 +16,8 @@ def get_clipboard_content():
 # Function to apply transformations to the selected text
 def apply_transformation(func, selected_text, callback):
     transformed_text = func(selected_text)
+    if transformed_text is None:
+        return
     callback()
     pyperclip.copy(transformed_text)
     pyautogui.hotkey('ctrl', 'v')

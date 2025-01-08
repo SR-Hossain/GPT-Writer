@@ -27,6 +27,7 @@ class PopupWindow(tk.Toplevel):
             ("AI Prompt", ai_prompt),
             ("Custom Prompt", custom_ai_prompt),
             ("Rephrase", rephrase),
+            ("Search AI", self.search_ai),
         ]
 
         self.selected_index = 0
@@ -96,6 +97,62 @@ class PopupWindow(tk.Toplevel):
         self.buttons[index].focus_set()
         self.buttons[index].config(bg='#2980B9')
 
+    def search_ai(self, text=None):
+        """Generate a concise response and display it as plain text in the dialog."""
+        if text is None:
+            text = self.selected_text
+
+        # Generate the AI response
+        response = Gemini().generate_response(
+            f'N.B: Return response as raw form without any markdown formatting\n\nprompt: {text}')
+
+        # Clear all widgets in the window
+        for widget in self.winfo_children():
+            widget.destroy()
+
+        # Create a frame to hold the canvas and text widget
+        frame = tk.Frame(self)
+        frame.pack(fill=tk.BOTH, expand=True)
+
+        # Create a canvas widget for scrollable area
+        canvas = tk.Canvas(frame, bg='#2C3E50')
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Add a scrollbar to the canvas for vertical scrolling only
+        scrollbar = tk.Scrollbar(frame, orient="vertical", command=canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Create a Text widget to display the AI response
+        text_widget = tk.Text(canvas, wrap=tk.WORD, font=('Helvetica', 14), bg='#2C3E50', fg='white', relief='flat',
+                              padx=20, pady=20, width=40)
+        text_widget.insert(tk.END, response)
+        text_widget.config(state=tk.DISABLED)  # Make the text widget read-only
+        text_widget.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        text_widget.configure(yscrollcommand=scrollbar.set)
+
+        # Create a window inside the canvas to hold the text widget
+        canvas.create_window((0, 0), window=text_widget, anchor=tk.NW)
+
+        # Update the scroll region of the canvas to fit the text widget
+        text_widget.update_idletasks()
+        canvas.config(scrollregion=canvas.bbox("all"))
+
+        # Update the window size based on the content
+        self.update_idletasks()
+        content_height = canvas.bbox("all")[3]  # Height of the text content
+        content_width = canvas.bbox("all")[2]  # Width of the text content
+
+        # Adjust window size to fit content, adding some padding for better readability
+        self.geometry(f"{max(content_width + 50, 400)}x{content_height + 100}")
+
+        # Add a close button
+        close_button = tk.Button(self, text="Close", command=self.close, bg='#2980B9', fg='white',
+                                 font=('Helvetica', 12, 'bold'), relief='flat')
+        close_button.pack(pady=10)
+
+        # Ensure mouse/touchpad scrolling works by associating scrollbar with canvas
+        scrollbar.config(command=canvas.yview)
+
     def apply_selected(self, event):
         """Invoke the transformation function of the selected button."""
         self.buttons[self.selected_index].invoke()
@@ -114,6 +171,7 @@ class PopupWindow(tk.Toplevel):
         self.after_cancel(self.after(100, self.check_focus))
         self.grab_release()
         self.destroy()
+        self.quit()
 
 
 # Main program execution
