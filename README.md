@@ -7,7 +7,7 @@ cd
 rm -rf GPT-Writer
 git clone https://github.com/SR-Hossain/GPT-Writer.git
 cd GPT-Writer
-pip install -r requirements.txt
+pip install -r requirements.txt | pip install -r requirements.txt --break-system-packages
 chmod +x gpt-writer
 sudo cp gpt-writer /usr/bin
 gpt-writer --help
