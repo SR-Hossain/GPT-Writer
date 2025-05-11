@@ -13,7 +13,7 @@ class Gemini(metaclass=Singleton):
             config = json.load(json_file)
             self.GOOGLE_API_KEY = config['AI_API_KEY']
         genai.configure(api_key=self.GOOGLE_API_KEY)
-        self.geminiModel = genai.GenerativeModel('gemini-pro')
+        self.geminiModel = genai.GenerativeModel('gemini-1.5-flash')
 
     def generate_response(self, prompt):
         return self.geminiModel.generate_content(prompt).text
